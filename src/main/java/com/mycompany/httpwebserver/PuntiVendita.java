@@ -1,10 +1,10 @@
 package com.mycompany.httpwebserver;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PuntiVendita {
     private int size;
-    private ArrayList<PuntoVendita> lista;
+    private List<PuntoVendita> listaRisultati;
 
     public int getSize() {
         return size;
@@ -14,11 +14,11 @@ public class PuntiVendita {
         this.size = size;
     }
 
-    public ArrayList<PuntoVendita> getLista() {
-        return lista;
+    public List<PuntoVendita> getListaRisultati() {
+        return listaRisultati;
     }
 
-    public void setLista(ArrayList<PuntoVendita> lista) {
-        this.lista = lista;
+    public void setListaRisultati(List<PuntoVendita> listaRisultati) {
+        this.listaRisultati = listaRisultati;
     }
 }

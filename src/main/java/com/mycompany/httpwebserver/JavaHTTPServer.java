@@ -88,16 +88,8 @@ public class JavaHTTPServer implements Runnable{
 			// we support only GET and HEAD methods, we check
 			if (!method.equals("GET")  &&  !method.equals("HEAD")) {
 				if (verbose) {
-					System.out.println("501 Not Implemented : " + method + " method.");
-				}else if(fileRequested.equals("/puntivendita.xml")){
-                                    ObjectMapper objMap = new ObjectMapper();
-                                    PuntiVendita pv = objMap.readValue(new File(WEB_ROOT+"/puntiVendita.json"), PuntiVendita.class);
-
-                                    XmlMapper xmlMapper = new XmlMapper();
-                                    xmlMapper.writeValue(new File(WEB_ROOT+"/puntiVendita.xml"),new PuntiVendita());
-                                    File file = new File(WEB_ROOT+"/puntiVendita.xml");
-                                }
-				
+					System.out.println("501 Not Implemented : " + method + " method.");       
+				}
 				// we return the not supported file to the client
 				File file = new File(WEB_ROOT, METHOD_NOT_SUPPORTED);
 				int fileLength = (int) file.length();
@@ -121,7 +113,13 @@ public class JavaHTTPServer implements Runnable{
 				// GET or HEAD method
 				if (fileRequested.endsWith("/")) {
 					fileRequested += DEFAULT_FILE;
-				}
+				}else if(fileRequested.equals("/puntivendita.xml")){
+                                    ObjectMapper objMap = new ObjectMapper();
+                                    pv = objMap.readValue(new File(WEB_ROOT+"/puntiVendita.json"), PuntiVendita.class);
+                                    XmlMapper xmlMapper = new XmlMapper();
+                                    xmlMapper.writeValue(new File(WEB_ROOT,"/puntiVendita.xml"),pv);
+                                    File file = new File(WEB_ROOT,"/puntiVendita.xml");
+                                }
 				
 				File file = new File(WEB_ROOT, fileRequested);
 				int fileLength = (int) file.length();
@@ -195,8 +193,12 @@ public class JavaHTTPServer implements Runnable{
 	private String getContentType(String fileRequested) {
 		if (fileRequested.endsWith(".htm")  ||  fileRequested.endsWith(".html"))
 			return "text/html";
+                else if (fileRequested.endsWith(".xml"))
+                        return "text/xml";
+                else if (fileRequested.endsWith(".json"))
+                        return "apprication/json";
 		else
-			return "text/plain";
+                        return "text/plain";
 	}
 	
 	private void fileNotFound(PrintWriter out, OutputStream dataOut, String fileRequested) throws IOException {

@@ -2,7 +2,7 @@ package com.mycompany.httpwebserver;
 
 public class PuntoVendita {
     private int idPuntoVendita;
-    private String denomunazione;
+    private String denominazione;
     private String indirizzo;
     private String cap;
     private String comune;
@@ -11,9 +11,9 @@ public class PuntoVendita {
     private String telefonoPrincipale;
     private String telefonoSecondario;
     private String email;
-    private int latitudine;
-    private int longitudine;
-    private Boolean flagFisicoOnline;
+    private String latitudine;
+    private String longitudine;
+    private boolean flagFisicoOnline;
     private int idEsercente;
     private String ragioneSociale;
 
@@ -25,12 +25,12 @@ public class PuntoVendita {
         this.idPuntoVendita = idPuntoVendita;
     }
 
-    public String getDenomunazione() {
-        return denomunazione;
+    public String getDenominazione() {
+        return denominazione;
     }
 
-    public void setDenomunazione(String denomunazione) {
-        this.denomunazione = denomunazione;
+    public void setDenominazione(String denominazione) {
+        this.denominazione = denominazione;
     }
 
     public String getIndirizzo() {
@@ -97,27 +97,27 @@ public class PuntoVendita {
         this.email = email;
     }
 
-    public int getLatitudine() {
+    public String getLatitudine() {
         return latitudine;
     }
 
-    public void setLatitudine(int latitudine) {
+    public void setLatitudine(String latitudine) {
         this.latitudine = latitudine;
     }
 
-    public int getLongitudine() {
+    public String getLongitudine() {
         return longitudine;
     }
 
-    public void setLongitudine(int longitudine) {
+    public void setLongitudine(String longitudine) {
         this.longitudine = longitudine;
     }
 
-    public Boolean getFlagFisicoOnline() {
+    public boolean isFlagFisicoOnline() {
         return flagFisicoOnline;
     }
 
-    public void setFlagFisicoOnline(Boolean flagFisicoOnline) {
+    public void setFlagFisicoOnline(boolean flagFisicoOnline) {
         this.flagFisicoOnline = flagFisicoOnline;
     }
 
@@ -136,6 +136,4 @@ public class PuntoVendita {
     public void setRagioneSociale(String ragioneSociale) {
         this.ragioneSociale = ragioneSociale;
     }
-    
-    
 }
