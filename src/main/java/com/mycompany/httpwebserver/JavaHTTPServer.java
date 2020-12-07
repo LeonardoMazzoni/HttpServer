@@ -13,6 +13,12 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
 
@@ -22,7 +28,9 @@ import java.util.StringTokenizer;
 public class JavaHTTPServer implements Runnable{ 
 	
         private PuntiVendita pv;
+        private ArrayList<Studente> st;
 	static final File WEB_ROOT = new File("./files");
+        static final File DB_ROOT = new File("./files/db");
 	static final String DEFAULT_FILE = "index.html";
 	static final String FILE_NOT_FOUND = "404.html";
 	static final String METHOD_NOT_SUPPORTED = "not_supported.html";
@@ -112,13 +120,33 @@ public class JavaHTTPServer implements Runnable{
 			} else {
 				// GET or HEAD method
 				if (fileRequested.endsWith("/")) {
-					fileRequested += DEFAULT_FILE;
+                                    fileRequested += DEFAULT_FILE;
 				}else if(fileRequested.equals("/puntivendita.xml")){
                                     ObjectMapper objMap = new ObjectMapper();
                                     pv = objMap.readValue(new File(WEB_ROOT+"/puntiVendita.json"), PuntiVendita.class);
                                     XmlMapper xmlMapper = new XmlMapper();
                                     xmlMapper.writeValue(new File(WEB_ROOT,"/puntiVendita.xml"),pv);
                                     File file = new File(WEB_ROOT,"/puntiVendita.xml");
+                                } else if(fileRequested.equals("/db.xml")) {
+                                    try
+                                    {
+                                        Class.forName("com.mysql.jdbc.Driver");
+                                        Connection connessione = DriverManager.getConnection("jdbc:mysql://localhost:3306/testestpsit?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "Lillo1996");
+                                        Statement statement = connessione.createStatement();
+                                        ResultSet resultset = statement.executeQuery("select studenti.* from studenti");
+                                        for(int i = 0;resultset.next();i++)
+                                        {
+                                            String nome = resultset.getString("Nome");
+                                            String cognome = resultset.getString("Cognome");
+                                            st.add(new Studente(nome, cognome));
+                                        }
+                                        System.out.println(st.toString());
+                                        
+                                    } catch (ClassNotFoundException e) {
+                                            System.out.println(e.toString());
+                                    } catch (SQLException ex) {
+                                        System.out.println(ex.toString());
+                                    }
                                 }
 				
 				File file = new File(WEB_ROOT, fileRequested);
@@ -145,7 +173,7 @@ public class JavaHTTPServer implements Runnable{
 					System.out.println("File " + fileRequested + " of type " + content + " returned");
 				}
 				
-			}
+			} 
 			
 		} catch (FileNotFoundException fnfe) {
 			try {
