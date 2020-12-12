@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 
 // The tutorial can be found just here on the SSaurel's Blog : 
@@ -28,9 +29,8 @@ import java.util.StringTokenizer;
 public class JavaHTTPServer implements Runnable{ 
 	
         private PuntiVendita pv;
-        private ArrayList<Studente> st;
+        private Studenti s = new Studenti();
 	static final File WEB_ROOT = new File("./files");
-        static final File DB_ROOT = new File("./files/db");
 	static final String DEFAULT_FILE = "index.html";
 	static final String FILE_NOT_FOUND = "404.html";
 	static final String METHOD_NOT_SUPPORTED = "not_supported.html";
@@ -76,7 +76,9 @@ public class JavaHTTPServer implements Runnable{
 		// we manage our particular client connection
 		BufferedReader in = null; PrintWriter out = null; BufferedOutputStream dataOut = null;
 		String fileRequested = null;
-		
+		String nome;
+                String cognome;
+                
 		try {
 			// we read characters from the client via input stream on the socket
 			in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
@@ -94,6 +96,7 @@ public class JavaHTTPServer implements Runnable{
 			fileRequested = parse.nextToken().toLowerCase();
 			
 			// we support only GET and HEAD methods, we check
+                        System.out.println(fileRequested);
 			if (!method.equals("GET")  &&  !method.equals("HEAD")) {
 				if (verbose) {
 					System.out.println("501 Not Implemented : " + method + " method.");       
@@ -121,13 +124,15 @@ public class JavaHTTPServer implements Runnable{
 				// GET or HEAD method
 				if (fileRequested.endsWith("/")) {
                                     fileRequested += DEFAULT_FILE;
+                                    
 				}else if(fileRequested.equals("/puntivendita.xml")){
                                     ObjectMapper objMap = new ObjectMapper();
                                     pv = objMap.readValue(new File(WEB_ROOT+"/puntiVendita.json"), PuntiVendita.class);
                                     XmlMapper xmlMapper = new XmlMapper();
                                     xmlMapper.writeValue(new File(WEB_ROOT,"/puntiVendita.xml"),pv);
                                     File file = new File(WEB_ROOT,"/puntiVendita.xml");
-                                } else if(fileRequested.equals("/db.xml")) {
+                                    
+                                } else if(fileRequested.equals("/studenti.xml")) {
                                     try
                                     {
                                         Class.forName("com.mysql.jdbc.Driver");
@@ -136,11 +141,39 @@ public class JavaHTTPServer implements Runnable{
                                         ResultSet resultset = statement.executeQuery("select studenti.* from studenti");
                                         for(int i = 0;resultset.next();i++)
                                         {
-                                            String nome = resultset.getString("Nome");
-                                            String cognome = resultset.getString("Cognome");
-                                            st.add(new Studente(nome, cognome));
+                                            nome = resultset.getString("Nome");
+                                            cognome = resultset.getString("Cognome");
+                                            System.out.println(nome +" "+ cognome);
+                                            Studente st = new Studente(nome, cognome);
+                                            s.getListaStudenti().add(st);
                                         }
-                                        System.out.println(st.toString());
+                                        XmlMapper xmlMapper = new XmlMapper();
+                                        xmlMapper.writeValue(new File(WEB_ROOT,"/studenti.xml"),s);
+                                        File file = new File(WEB_ROOT,"/studenti.xml");
+                                        
+                                    } catch (ClassNotFoundException e) {
+                                            System.out.println(e.toString());
+                                    } catch (SQLException ex) {
+                                        System.out.println(ex.toString());
+                                    }
+                                } else if(fileRequested.equals("/studenti.json")) {
+                                    try
+                                    {
+                                        Class.forName("com.mysql.jdbc.Driver");
+                                        Connection connessione = DriverManager.getConnection("jdbc:mysql://localhost:3306/testestpsit?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "Lillo1996");
+                                        Statement statement = connessione.createStatement();
+                                        ResultSet resultset = statement.executeQuery("select studenti.* from studenti");
+                                        for(int i = 0;resultset.next();i++)
+                                        {
+                                            nome = resultset.getString("Nome");
+                                            cognome = resultset.getString("Cognome");
+                                            System.out.println(nome +" "+ cognome);
+                                            Studente st = new Studente(nome, cognome);
+                                            s.getListaStudenti().add(st);
+                                        }
+                                        ObjectMapper objMap = new ObjectMapper();
+                                        objMap.writeValue(new File(WEB_ROOT,"/car.json"), s);
+                                        File file = new File(WEB_ROOT,"/studenti.json");
                                         
                                     } catch (ClassNotFoundException e) {
                                             System.out.println(e.toString());

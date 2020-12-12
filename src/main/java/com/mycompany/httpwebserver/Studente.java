@@ -25,6 +25,9 @@ public class Studente {
     public void setCognome(String cognome) {
         this.cognome = cognome;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Studente{" + "nome=" + nome + ", cognome=" + cognome + '}';
+    }
 }
