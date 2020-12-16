@@ -28,15 +28,15 @@ import java.util.StringTokenizer;
 // Each Client Connection will be managed in a dedicated Thread
 public class JavaHTTPServer implements Runnable{ 
 	
-        private PuntiVendita pv;
-        private Studenti s = new Studenti();
+  private PuntiVendita pv;
+  private Studenti s = new Studenti();
 	static final File WEB_ROOT = new File("./files");
 	static final String DEFAULT_FILE = "index.html";
 	static final String FILE_NOT_FOUND = "404.html";
 	static final String METHOD_NOT_SUPPORTED = "not_supported.html";
         static final String PAGE_NOT_FOUND = "301.html";
 	// port to listen connection
-	static final int PORT = 8080;
+	static final int PORT = 3000;
 	
 	// verbose mode
 	static final boolean verbose = true;
@@ -172,7 +172,7 @@ public class JavaHTTPServer implements Runnable{
                                             s.getListaStudenti().add(st);
                                         }
                                         ObjectMapper objMap = new ObjectMapper();
-                                        objMap.writeValue(new File(WEB_ROOT,"/car.json"), s);
+                                        objMap.writeValue(new File(WEB_ROOT,"/studenti.json"), s);
                                         File file = new File(WEB_ROOT,"/studenti.json");
                                         
                                     } catch (ClassNotFoundException e) {
