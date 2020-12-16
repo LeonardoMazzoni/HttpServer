@@ -28,8 +28,8 @@ import java.util.StringTokenizer;
 // Each Client Connection will be managed in a dedicated Thread
 public class JavaHTTPServer implements Runnable{ 
 	
-        private PuntiVendita pv;
-        private Studenti s = new Studenti();
+  private PuntiVendita pv;
+  private Studenti s = new Studenti();
 	static final File WEB_ROOT = new File("./files");
 	static final String DEFAULT_FILE = "index.html";
 	static final String FILE_NOT_FOUND = "404.html";
