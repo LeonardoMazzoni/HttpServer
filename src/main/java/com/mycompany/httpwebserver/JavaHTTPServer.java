@@ -36,7 +36,7 @@ public class JavaHTTPServer implements Runnable{
 	static final String METHOD_NOT_SUPPORTED = "not_supported.html";
         static final String PAGE_NOT_FOUND = "301.html";
 	// port to listen connection
-	static final int PORT = 8080;
+	static final int PORT = 3000;
 	
 	// verbose mode
 	static final boolean verbose = true;
@@ -135,6 +135,13 @@ public class JavaHTTPServer implements Runnable{
                                 } else if(fileRequested.equals("/studenti.xml")) {
                                     try
                                     {
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
                                         Class.forName("com.mysql.jdbc.Driver");
                                         Connection connessione = DriverManager.getConnection("jdbc:mysql://localhost:3306/testestpsit?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "Lillo1996");
                                         Statement statement = connessione.createStatement();
@@ -151,6 +158,12 @@ public class JavaHTTPServer implements Runnable{
                                         xmlMapper.writeValue(new File(WEB_ROOT,"/studenti.xml"),s);
                                         File file = new File(WEB_ROOT,"/studenti.xml");
                                         
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
                                     } catch (ClassNotFoundException e) {
                                             System.out.println(e.toString());
                                     } catch (SQLException ex) {
@@ -159,6 +172,11 @@ public class JavaHTTPServer implements Runnable{
                                 } else if(fileRequested.equals("/studenti.json")) {
                                     try
                                     {
+                                        
+                                        
+                                        
+                                        
+                                        
                                         Class.forName("com.mysql.jdbc.Driver");
                                         Connection connessione = DriverManager.getConnection("jdbc:mysql://localhost:3306/testestpsit?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "Lillo1996");
                                         Statement statement = connessione.createStatement();
@@ -172,8 +190,14 @@ public class JavaHTTPServer implements Runnable{
                                             s.getListaStudenti().add(st);
                                         }
                                         ObjectMapper objMap = new ObjectMapper();
-                                        objMap.writeValue(new File(WEB_ROOT,"/car.json"), s);
+                                        objMap.writeValue(new File(WEB_ROOT,"/studenti.json"), s);
                                         File file = new File(WEB_ROOT,"/studenti.json");
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
                                         
                                     } catch (ClassNotFoundException e) {
                                             System.out.println(e.toString());
