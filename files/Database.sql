@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `java` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `java`;
--- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `testestpsit` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `testestpsit`;
+-- MySQL dump 10.13  Distrib 8.0.21, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: java
+-- Host: 127.0.0.1    Database: testestpsit
 -- ------------------------------------------------------
--- Server version	8.0.22
+-- Server version	8.0.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,28 +18,28 @@ USE `java`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `foobar`
+-- Table structure for table `studenti`
 --
 
-DROP TABLE IF EXISTS `foobar`;
+DROP TABLE IF EXISTS `studenti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `foobar` (
+CREATE TABLE `studenti` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nome` varchar(32) DEFAULT NULL,
-  `cognome` varchar(32) DEFAULT NULL,
+  `nome` varchar(45) DEFAULT NULL,
+  `cognome` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `foobar`
+-- Dumping data for table `studenti`
 --
 
-LOCK TABLES `foobar` WRITE;
-/*!40000 ALTER TABLE `foobar` DISABLE KEYS */;
-INSERT INTO `foobar` VALUES (1,'Giulio','Cacca'),(2,'Roberto','Toony'),(3,'Ronald','Gianni');
-/*!40000 ALTER TABLE `foobar` ENABLE KEYS */;
+LOCK TABLES `studenti` WRITE;
+/*!40000 ALTER TABLE `studenti` DISABLE KEYS */;
+INSERT INTO `studenti` VALUES (1,'Leonardo','Mazzoni'),(2,'Andrea','Buono'),(3,'Andrea','Lotti'),(4,'Stefano','Caiazzo'),(5,'Francesco','Lazzarelli'),(6,'Lorenzo','Camigliano');
+/*!40000 ALTER TABLE `studenti` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-02-03  9:27:23
+-- Dump completed on 2021-02-03 10:01:26
