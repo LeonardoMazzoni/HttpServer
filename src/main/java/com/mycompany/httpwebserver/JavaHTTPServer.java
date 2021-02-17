@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -30,7 +31,11 @@ public class JavaHTTPServer implements Runnable{
 	
   private PuntiVendita pv;
   private Studenti s = new Studenti();
-	static final File WEB_ROOT = new File("/files");
+        byte[] fileData = null;
+        int fileLength = 0;
+        String content = null;
+        boolean db = false;
+	static final String WEB_ROOT = "/files";
 	static final String DEFAULT_FILE = "index.html";
 	static final String FILE_NOT_FOUND = "404.html";
 	static final String METHOD_NOT_SUPPORTED = "not_supported.html";
@@ -102,11 +107,10 @@ public class JavaHTTPServer implements Runnable{
 					System.out.println("501 Not Implemented : " + method + " method.");       
 				}
 				// we return the not supported file to the client
-				File file = new File(WEB_ROOT, METHOD_NOT_SUPPORTED);
-				int fileLength = (int) file.length();
+				byte[] fileData = readFileData(WEB_ROOT+METHOD_NOT_SUPPORTED);
+                                int fileLength = fileData.length;
 				String contentMimeType = "text/html";
 				//read content to return to client
-				byte[] fileData = readFileData(file, fileLength);
 					
 				// we send HTTP Headers with data to client
 				out.println("HTTP/1.1 501 Not Implemented");
@@ -127,10 +131,13 @@ public class JavaHTTPServer implements Runnable{
                                     
 				}else if(fileRequested.equals("/puntivendita.xml")){
                                     ObjectMapper objMap = new ObjectMapper();
-                                    pv = objMap.readValue(new File(WEB_ROOT+"/puntiVendita.json"), PuntiVendita.class);
+                                    pv = objMap.readValue(getClass().getResourceAsStream(WEB_ROOT+"/puntiVendita.json"), PuntiVendita.class);
                                     XmlMapper xmlMapper = new XmlMapper();
-                                    xmlMapper.writeValue(new File(WEB_ROOT,"/puntiVendita.xml"),pv);
-                                    File file = new File(WEB_ROOT,"/puntiVendita.xml");
+                                    String palle = xmlMapper.writeValueAsString(pv);
+                                    fileData = palle.getBytes();
+                                    fileLength = fileData.length;
+                                    content = getContentType(fileRequested);
+                                    db = true;
                                     
                                 } else if(fileRequested.equals("/studenti.xml")) {
                                     try
@@ -155,9 +162,11 @@ public class JavaHTTPServer implements Runnable{
                                             s.getListaStudenti().add(st);
                                         }
                                         XmlMapper xmlMapper = new XmlMapper();
-                                        xmlMapper.writeValue(new File(WEB_ROOT,"/studenti.xml"),s);
-                                        File file = new File(WEB_ROOT,"/studenti.xml");
-                                        
+                                        String palle = xmlMapper.writeValueAsString(s);
+                                        fileData = palle.getBytes();
+                                        fileLength = fileData.length;
+                                        content = getContentType(fileRequested);
+                                        db = true;
                                         
                                         
                                         
@@ -189,10 +198,12 @@ public class JavaHTTPServer implements Runnable{
                                             Studente st = new Studente(nome, cognome);
                                             s.getListaStudenti().add(st);
                                         }
-                                        ObjectMapper objMap = new ObjectMapper();
-                                        objMap.writeValue(new File(WEB_ROOT,"/studenti.json"), s);
-                                        File file = new File(WEB_ROOT,"/studenti.json");
-                                        
+                                        ObjectMapper objectMapper = new ObjectMapper();
+                                        String palle = objectMapper.writeValueAsString(s);
+                                        fileData = palle.getBytes();
+                                        fileLength = fileData.length;
+                                        content = getContentType(fileRequested);
+                                        db = true;
                                         
                                         
                                         
@@ -206,12 +217,15 @@ public class JavaHTTPServer implements Runnable{
                                     }
                                 }
 				
-				File file = new File(WEB_ROOT, fileRequested);
-				int fileLength = (int) file.length();
-				String content = getContentType(fileRequested);
+                                if(db)
+                                {
+                                    fileData = readFileData(WEB_ROOT+fileRequested);
+                                    fileLength = fileData.length;
+                                    content = getContentType(fileRequested);
+                                }
+				db = false;
 				
 				if (method.equals("GET")) { // GET method so we return content
-					byte[] fileData = readFileData(file, fileLength);
 					
 					// send HTTP Headers
 					out.println("HTTP/1.1 200 OK");
@@ -259,13 +273,16 @@ public class JavaHTTPServer implements Runnable{
 		
 	}
 	
-	private byte[] readFileData(File file, int fileLength) throws IOException {
-		FileInputStream fileIn = null;
-		byte[] fileData = new byte[fileLength];
-		
+	private byte[] readFileData(String file) throws IOException {
+		byte[] fileData = null;
+		InputStream fileIn = null;
+                
 		try {
-			fileIn = new FileInputStream(file);
-			fileIn.read(fileData);
+         
+			fileIn = getClass().getResourceAsStream(file);
+                        if(fileIn == null||!file.contains("."))return null;
+                        fileData = new byte[fileIn.available()];
+                        fileIn.read(fileData);
 		} finally {
 			if (fileIn != null) 
 				fileIn.close();
@@ -289,9 +306,8 @@ public class JavaHTTPServer implements Runnable{
 	private void fileNotFound(PrintWriter out, OutputStream dataOut, String fileRequested) throws IOException {
             String content = "text/html";
             if(fileRequested.endsWith(".html")){
-		File file = new File(WEB_ROOT, FILE_NOT_FOUND);
-		int fileLength = (int) file.length();
-		byte[] fileData = readFileData(file, fileLength);
+		byte[] fileData = readFileData(WEB_ROOT+FILE_NOT_FOUND);
+                int fileLength = fileData.length;
 		
                 
 		out.println("HTTP/1.1 404 File Not Found");
@@ -310,9 +326,8 @@ public class JavaHTTPServer implements Runnable{
                 }
         }else
                 {
-                    File file = new File(WEB_ROOT, PAGE_NOT_FOUND);
-                    int fileLength = (int) file.length();
-                    byte[] fileData = readFileData(file, fileLength);
+                    byte[] fileData = readFileData(WEB_ROOT+PAGE_NOT_FOUND);
+                    int fileLength = fileData.length;
                 
                     out.println("HTTP/1.1 301 Page Not Found");
                     out.println("Server: Java HTTP Server from SSaurel : 1.0");

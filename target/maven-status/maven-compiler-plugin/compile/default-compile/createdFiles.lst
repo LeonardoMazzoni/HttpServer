@@ -1,5 +1,5 @@
-com/mycompany/httpwebserver/JavaHTTPServer.class
-com/mycompany/httpwebserver/PuntoVendita.class
-com/mycompany/httpwebserver/Studenti.class
-com/mycompany/httpwebserver/Studente.class
-com/mycompany/httpwebserver/PuntiVendita.class
+com\mycompany\httpwebserver\Studente.class
+com\mycompany\httpwebserver\PuntoVendita.class
+com\mycompany\httpwebserver\PuntiVendita.class
+com\mycompany\httpwebserver\JavaHTTPServer.class
+com\mycompany\httpwebserver\Studenti.class
